@@ -2,7 +2,8 @@ import { useCallback, useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import "./HeartDrawing.css";
 import AnimatedText from "./hand-written.component";
-import img from "../assets/img/cover.jpg";
+import img from "../assets/img/cover.png";
+
 const HeartDrawing = () => {
   const [path, setPath] = useState("");
   const [key, setKey] = useState(0);
@@ -21,10 +22,12 @@ const HeartDrawing = () => {
 
     // Вычисляем масштаб для адаптации к размеру экрана
     // Учитываем отступы с обеих сторон
+    console.log(height);
+    const coeff = height < 700 ? 1.5 : 1;
     const padding = Math.min(width, height) * 0.15;
     const scaleX = (width - padding * 2) / 32;
     const scaleY = (height - padding * 2) / 30;
-    const scale = Math.min(scaleX, scaleY); // Сохраняем пропорции
+    const scale = Math.min(scaleX, scaleY) * coeff; // Сохраняем пропорции
 
     // Центрирование относительно экрана
     const centerX = width / 2;
@@ -121,11 +124,51 @@ const HeartDrawing = () => {
         className="heart-svg"
         width={dimensions.width}
         height={dimensions.height}
-        viewBox={`0 0 ${dimensions.width} ${dimensions.height + 200}`}
+        viewBox={`0 0 ${dimensions.width} ${dimensions.height + 100}`}
         initial="hidden"
         animate={`${startText ? "visible" : pathVariants["beat"]}`}
+        style={{
+          overflow: "visible",
+        }}
       >
+        {/* <motion.path
+          d={path}
+          variants={pathVariants}
+          stroke="#ff0055"
+          strokeWidth={Math.max(
+            2,
+            Math.min(dimensions.width, dimensions.height) / 200
+          )}
+          initial="hidden"
+          animate="visible"
+          fill="transparent"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          onAnimationComplete={handleOnHeartComplete}
+        /> */}
+
+        <defs
+          style={{
+            overflow: "visible",
+            zIndex: 10,
+          }}
+        >
+          <clipPath id="customClipPath">
+            <motion.path
+              d={path}
+              fill="transparent"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              onAnimationComplete={handleOnHeartComplete}
+            />
+          </clipPath>
+        </defs>
+
         <motion.path
+          style={{
+            overflow: "visible",
+            zIndex: 10,
+          }}
           d={path}
           variants={pathVariants}
           stroke="#ff0055"
@@ -140,39 +183,43 @@ const HeartDrawing = () => {
           strokeLinejoin="round"
           onAnimationComplete={handleOnHeartComplete}
         />
-
-        <motion.defs>
-          <motion.clipPath id="customClipPath">
-            <motion.path
-              d={path}
-              variants={pathVariants}
-              stroke="#ff0055"
-              strokeWidth={Math.max(
-                2,
-                Math.min(dimensions.width, dimensions.height) / 200
-              )}
-              initial="hidden"
+        {/* <motion.g clipPath={path}>
+          {startText && (
+            <motion.image
               animate="visible"
-              fill="transparent"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              onAnimationComplete={handleOnHeartComplete}
+              variants={pathVariants}
+              href={img}
+              width="100%"
+              height="100%"
+              clipPath={path}
+              style={{
+                clipPath: path,
+                objectFit: "cover",
+              }}
             />
-          </motion.clipPath>
-        </motion.defs>
+          )}
+        </motion.g> */}
 
         {startText && (
           <motion.image
-            animate="visible"
-            variants={pathVariants}
-            href={img}
+            className="heart-cover"
+            xlinkHref={img}
             width="100%"
             height="100%"
-            clipPath="url(#customClipPath)"
-            style={{
-              objectFit: "cover",
+            preserveAspectRatio="meet"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{
+              delay: 0.2,
+              duration: 0.5,
             }}
-          />
+            role="img"
+            style={{
+              clipPath: "url(#customClipPath)",
+            }}
+          >
+            {/* <motion.img src={img} /> */}
+          </motion.image>
         )}
       </motion.svg>
       {startText && (

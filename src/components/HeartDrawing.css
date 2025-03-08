@@ -1,8 +1,8 @@
 /* HeartDrawing.css */
 .heart-container {
   position: relative;
-  width: 100vw;
-  height: 100vh;
+  width: 100svw;
+  height: 100svh;
   overflow: hidden;
   background-color: #faf0f3;
   font-family: "Arial", sans-serif;
@@ -89,17 +89,24 @@
 
 .heart-title > span {
   position: relative;
-  top: 40%;
-  font-size: 6ch;
+  top: 35%;
+  /* font-size: 2.5rem; */
+  font-size: calc(
+    var(--min-font-size) + (var(--max-font-size) - var(--min-font-size))
+  );
   z-index: 2;
   font-family: "Mirra", sans-serif;
 }
 
 .heart-discription > span {
-  margin-bottom: 3rem;
-  font-size: 6ch;
+  margin-bottom: 2rem;
+  font-size: 2.5rem;
   z-index: 2;
   font-family: "Mirra", sans-serif;
+}
+
+.heart-cover {
+  object-position: "20% 50%";
 }
 
 /* Медиа-запросы для адаптивности */

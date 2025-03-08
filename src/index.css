@@ -7,6 +7,11 @@
 }
 
 :root {
+  --min-font-size: 16px;
+  --max-font-size: 29px;
+  --min-viewport-width: 320px;
+  --max-viewport-width: 1920px;
+
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
